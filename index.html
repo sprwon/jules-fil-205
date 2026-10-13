@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lycée Jules Fil</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;700&display=swap">
+<style>
+:root{
+  box-sizing:border-box;
+  --bg:#f4f6fb;--card:#fff;--ink:#14213d;--mute:#5a6785;--line:#d9dff0;--brand:#2d4fd6;--on:#fff;--hl:#ffe14d;--hlink:#3b2f00;--danger:#c0392b;--ok:#1e8e5a;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1326;--card:#161e38;--ink:#eef1fb;--mute:#9aa6c8;--line:#27315a;--brand:#7f9bff;--on:#0d1326;--danger:#ff7b6b;--ok:#52d398}}
+:root[data-theme="dark"]{--bg:#0d1326;--card:#161e38;--ink:#eef1fb;--mute:#9aa6c8;--line:#27315a;--brand:#7f9bff;--on:#0d1326;--danger:#ff7b6b;--ok:#52d398}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(70px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:'Bricolage Grotesque',Georgia,sans-serif;margin:0;line-height:1.1}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.brand{font:800 21px 'Bricolage Grotesque',sans-serif;background:none;border:0;color:var(--ink);cursor:pointer;padding:0}
+.brand span{background:linear-gradient(transparent 55%,var(--hl) 55%);color:var(--ink);padding:0 4px}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{font:500 15px Figtree,sans-serif;border:0;background:none;color:var(--mute);padding:9px 14px;border-radius:999px;cursor:pointer}
+nav button[aria-current="page"]{background:var(--brand);color:var(--on)}
+nav button:hover:not([aria-current="page"]){color:var(--ink);background:var(--bg)}
+main{padding:36px 0 70px}
+.view{display:none}.view.on{display:block}
+h1{font-size:clamp(30px,5.5vw,48px);font-weight:800;margin-bottom:8px}
+h2{font-size:26px;font-weight:700;margin-bottom:6px}
+.sub{color:var(--mute);margin:0 0 28px}
+.tiles{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tile{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;cursor:pointer;color:var(--ink);font:inherit;transition:transform .15s,border-color .15s}
+.tile:hover{transform:translateY(-3px);border-color:var(--brand)}
+.tile h3{font-size:22px;margin:10px 0 6px}
+.tile p{margin:0;color:var(--mute)}
+.tile b{font:800 38px 'Bricolage Grotesque',sans-serif;color:var(--brand)}
+.tile .go{display:inline-block;margin-top:14px;font-weight:700;color:var(--brand)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:22px}
+form.row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}
+label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:500;color:var(--mute);flex:1 1 150px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input[type=color]{padding:3px;height:42px}
+textarea{min-height:110px;resize:vertical}
+.btn{font:700 15px Figtree,sans-serif;background:var(--brand);color:var(--on);border:0;border-radius:999px;padding:11px 22px;cursor:pointer}
+.btn:hover{opacity:.9}
+.btn.s{background:none;color:var(--danger);padding:6px 10px;font-weight:500;font-size:14px}
+.empty{color:var(--mute);border:2px dashed var(--line);border-radius:16px;padding:28px;text-align:center}
+.cgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.course{background:var(--card);border:1px solid var(--line);border-left:8px solid var(--c);border-radius:14px;padding:16px 18px}
+.course h3{font-size:20px}
+.course small{color:var(--mute)}
+.course details{margin-top:10px}
+.course summary{cursor:pointer;font-weight:700;color:var(--brand)}
+.course textarea{margin-top:8px}
+.course .top{display:flex;justify-content:space-between;gap:8px;align-items:start}
+/* Emploi du temps */
+.tt{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.ttg{display:grid;grid-template-columns:52px repeat(5,minmax(130px,1fr));min-width:760px}
+.ttg .h{padding:10px;font-weight:700;text-align:center;border-bottom:1px solid var(--line);background:var(--bg)}
+.hours div{height:48px;font-size:12px;color:var(--mute);text-align:right;padding:2px 6px 0 0;border-top:1px solid var(--line)}
+.day{position:relative;height:480px;border-left:1px solid var(--line);background:repeating-linear-gradient(var(--card) 0 47px,var(--line) 47px 48px)}
+.slot{position:absolute;left:4px;right:4px;border-radius:8px;padding:5px 8px;font-size:13px;line-height:1.3;background:color-mix(in srgb,var(--c) 28%,var(--card));border-left:5px solid var(--c);overflow:hidden;color:var(--ink)}
+.slot b{display:block}
+.slot button{position:absolute;top:2px;right:4px;border:0;background:none;color:var(--ink);cursor:pointer;font-size:16px;opacity:.6}
+/* Tâches */
+.tasks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.task{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.task input{width:22px;height:22px;flex:none;accent-color:var(--ok)}
+.task .t{flex:1}
+.task.done .t strong{text-decoration:line-through;color:var(--mute)}
+.chip{display:inline-block;font-size:13px;padding:1px 10px;border-radius:999px;background:color-mix(in srgb,var(--c,#888) 25%,var(--card));margin-right:6px}
+.late{color:var(--danger);font-weight:700;font-size:13px}
+.filter{max-width:220px;margin-bottom:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <button class="brand" data-go="home" aria-label="Accueil"><span>Lycée</span> Jules Fil</button>
+    <nav aria-label="Navigation principale">
+      <button data-go="home">Accueil</button>
+      <button data-go="courses">Mes cours</button>
+      <button data-go="tt">Emploi du temps</button>
+      <button data-go="tasks">Tâches</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ACCUEIL -->
+  <section id="home" class="view">
+    <h1>Bienvenue au Lycée Jules Fil</h1>
+    <p class="sub">Ton espace pour organiser l'année : clique sur un bloc pour commencer.</p>
+    <div class="tiles">
+      <button class="tile" data-go="courses"><b id="nC">0</b><h3>Mes cours</h3><p>Ajoute tes matières, tes professeurs et tes notes de cours.</p><span class="go">Ouvrir mes cours</span></button>
+      <button class="tile" data-go="tt"><b id="nT">0</b><h3>Emploi du temps</h3><p>Place tes cours dans la semaine, du lundi au vendredi.</p><span class="go">Ouvrir l'emploi du temps</span></button>
+      <button class="tile" data-go="tasks"><b id="nK">0</b><h3>Tâches</h3><p>Devoirs, contrôles et révisions à ne pas oublier.</p><span class="go">Ouvrir mes tâches</span></button>
+    </div>
+  </section>
+
+  <!-- COURS -->
+  <section id="courses" class="view">
+    <h2>Mes cours</h2>
+    <p class="sub">Crée une fiche par matière et garde tes notes dedans.</p>
+    <form class="panel row" id="fC">
+      <label style="flex:2 1 200px">Matière<input name="name" required maxlength="60" placeholder="Mathématiques"></label>
+      <label>Professeur<input name="teacher" maxlength="60" placeholder="M. Durand"></label>
+      <label style="flex:0 0 90px">Couleur<input type="color" name="color" value="#2d4fd6"></label>
+      <button class="btn">Ajouter le cours</button>
+    </form>
+    <div id="lC" class="cgrid"></div>
+  </section>
+
+  <!-- EDT -->
+  <section id="tt" class="view">
+    <h2>Emploi du temps</h2>
+    <p class="sub">Ajoute un créneau pour chaque cours de la semaine.</p>
+    <div id="ttNoCourse" class="empty" hidden>Ajoute d'abord un cours dans « Mes cours » pour créer un créneau.</div>
+    <form class="panel row" id="fT">
+      <label style="flex:2 1 180px">Cours<select name="course" id="selT" required></select></label>
+      <label>Jour<select name="day"><option value="0">Lundi</option><option value="1">Mardi</option><option value="2">Mercredi</option><option value="3">Jeudi</option><option value="4">Vendredi</option></select></label>
+      <label style="flex:0 0 120px">Début<input type="time" name="start" value="08:00" required></label>
+      <label style="flex:0 0 120px">Fin<input type="time" name="end" value="09:00" required></label>
+      <label>Salle<input name="room" maxlength="20" placeholder="B204"></label>
+      <button class="btn">Ajouter le créneau</button>
+    </form>
+    <div class="tt"><div class="ttg" id="grid"></div></div>
+  </section>
+
+  <!-- TACHES -->
+  <section id="tasks" class="view">
+    <h2>Tâches</h2>
+    <p class="sub">Note ce que tu dois faire et coche-le une fois terminé.</p>
+    <form class="panel row" id="fK">
+      <label style="flex:2 1 220px">Tâche<input name="title" required maxlength="120" placeholder="Exercices 4 à 8 p.52"></label>
+      <label>Cours<select name="course" id="selK"></select></label>
+      <label style="flex:0 0 160px">Pour le<input type="date" name="due"></label>
+      <button class="btn">Ajouter la tâche</button>
+    </form>
+    <label class="filter">Afficher
+      <select id="flt"><option value="todo">À faire</option><option value="done">Terminées</option><option value="all">Toutes</option></select>
+    </label>
+    <ul class="tasks" id="lK"></ul>
+  </section>
+</main>
+
+<script>
+(function(){
+  var KEY='lycee-jules-fil';
+  var D={courses:[],slots:[],tasks:[]};
+  var S=D;
+  try{var raw=localStorage.getItem(KEY);if(raw){S=JSON.parse(raw);S.courses=S.courses||[];S.slots=S.slots||[];S.tasks=S.tasks||[];}}catch(e){S=D}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+  var $=function(s){return document.querySelector(s)};
+  function el(tag,attrs){
+    var n=document.createElement(tag);
+    for(var k in (attrs||{})){
+      if(k==='text')n.textContent=attrs[k];
+      else if(k==='style')n.setAttribute('style',attrs[k]);
+      else n.setAttribute(k,attrs[k]);
+    }
+    for(var i=2;i<arguments.length;i++)if(arguments[i])n.appendChild(arguments[i]);
+    return n;
+  }
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+  function course(id){return S.courses.filter(function(c){return c.id===id})[0]}
+  var DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+  var H0=8,H1=18,PX=48;
+  function mins(t){var p=t.split(':');return (+p[0])*60+(+p[1])}
+
+  /* Navigation */
+  function go(v){
+    document.querySelectorAll('.view').forEach(function(s){s.classList.toggle('on',s.id===v)});
+    document.querySelectorAll('nav button').forEach(function(b){
+      if(b.dataset.go===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+    });
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-go]');if(b)go(b.dataset.go);
+  });
+
+  /* Rendu */
+  function fillSelects(){
+    ['#selT','#selK'].forEach(function(id){
+      var s=$(id),cur=s.value;s.textContent='';
+      if(id==='#selK')s.appendChild(el('option',{value:'',text:'Aucun cours'}));
+      S.courses.forEach(function(c){s.appendChild(el('option',{value:c.id,text:c.name}))});
+      s.value=cur;
+    });
+    $('#ttNoCourse').hidden=S.courses.length>0;
+    $('#fT').style.display=S.courses.length?'':'none';
+  }
+
+  function renderCourses(){
+    var box=$('#lC');box.textContent='';
+    if(!S.courses.length){box.appendChild(el('div',{class:'empty',style:'grid-column:1/-1',text:'Aucun cours pour le moment. Ajoute ta première matière ci-dessus.'}));return}
+    S.courses.forEach(function(c){
+      var ta=el('textarea',{placeholder:'Écris tes notes de cours ici…','aria-label':'Notes de '+c.name});
+      ta.value=c.notes||'';
+      ta.addEventListener('input',function(){c.notes=ta.value;save()});
+      var del=el('button',{class:'btn s',text:'Supprimer'});
+      del.addEventListener('click',function(){
+        if(!confirm('Supprimer « '+c.name+' » avec ses créneaux et tâches ?'))return;
+        S.courses=S.courses.filter(function(x){return x.id!==c.id});
+        S.slots=S.slots.filter(function(x){return x.course!==c.id});
+        S.tasks=S.tasks.filter(function(x){return x.course!==c.id});
+        save();renderAll();
+      });
+      var card=el('div',{class:'course',style:'--c:'+c.color},
+        el('div',{class:'top'},
+          el('div',{},el('h3',{text:c.name}),el('small',{text:c.teacher||'Professeur non renseigné'})),del),
+        el('details',{},el('summary',{text:'Notes de cours'}),ta));
+      box.appendChild(card);
+    });
+  }
+
+  function renderTT(){
+    var g=$('#grid');g.textContent='';
+    g.appendChild(el('div',{class:'h',text:''}));
+    DAYS.forEach(function(d){g.appendChild(el('div',{class:'h',text:d}))});
+    var hours=el('div',{class:'hours'});
+    for(var h=H0;h<H1;h++)hours.appendChild(el('div',{text:h+'h'}));
+    g.appendChild(hours);
+    DAYS.forEach(function(d,i){
+      var col=el('div',{class:'day'});
+      S.slots.filter(function(s){return +s.day===i}).forEach(function(s){
+        var c=course(s.course);if(!c)return;
+        var top=(mins(s.start)-H0*60)/60*PX,hgt=(mins(s.end)-mins(s.start))/60*PX;
+        var x=el('button',{'aria-label':'Supprimer ce créneau',text:'×'});
+        x.addEventListener('click',function(){S.slots=S.slots.filter(function(z){return z.id!==s.id});save();renderAll()});
+        var info=el('div',{class:'slot',style:'--c:'+c.color+';top:'+top+'px;height:'+Math.max(hgt,24)+'px'},
+          el('b',{text:c.name}),el('span',{text:s.start+' – '+s.end+(s.room?' · '+s.room:'')}),x);
+        col.appendChild(info);
+      });
+      g.appendChild(col);
+    });
+  }
+
+  function renderTasks(){
+    var ul=$('#lK');ul.textContent='';
+    var f=$('#flt').value,today=new Date().toISOString().slice(0,10);
+    var list=S.tasks.filter(function(t){return f==='all'||(f==='done')===!!t.done});
+    list.sort(function(a,b){return (a.due||'9999').localeCompare(b.due||'9999')});
+    if(!list.length){ul.appendChild(el('li',{class:'empty',text:f==='done'?'Aucune tâche terminée.':'Rien à faire pour le moment.'}));return}
+    list.forEach(function(t){
+      var c=course(t.course);
+      var cb=el('input',{type:'checkbox','aria-label':'Terminée'});cb.checked=!!t.done;
+      cb.addEventListener('change',function(){t.done=cb.checked;save();renderAll()});
+      var meta=el('div',{});
+      if(c)meta.appendChild(el('span',{class:'chip',style:'--c:'+c.color,text:c.name}));
+      if(t.due){
+        meta.appendChild(el('span',{text:'Pour le '+t.due.split('-').reverse().join('/')+' '}));
+        if(!t.done&&t.due<today)meta.appendChild(el('span',{class:'late',text:'En retard'}));
+      }
+      var del=el('button',{class:'btn s',text:'Supprimer'});
+      del.addEventListener('click',function(){S.tasks=S.tasks.filter(function(z){return z.id!==t.id});save();renderAll()});
+      ul.appendChild(el('li',{class:'task'+(t.done?' done':'')},cb,el('div',{class:'t'},el('strong',{text:t.title}),meta),del));
+    });
+  }
+
+  function renderHome(){
+    $('#nC').textContent=S.courses.length;
+    $('#nT').textContent=S.slots.length;
+    $('#nK').textContent=S.tasks.filter(function(t){return !t.done}).length;
+  }
+  function renderAll(){fillSelects();renderCourses();renderTT();renderTasks();renderHome()}
+
+  /* Formulaires */
+  $('#fC').addEventListener('submit',function(e){
+    e.preventDefault();var f=new FormData(e.target);
+    S.courses.push({id:uid(),name:f.get('name').trim(),teacher:f.get('teacher').trim(),color:f.get('color'),notes:''});
+    save();e.target.reset();renderAll();
+  });
+  $('#fT').addEventListener('submit',function(e){
+    e.preventDefault();var f=new FormData(e.target);
+    if(mins(f.get('end'))<=mins(f.get('start'))){alert("L'heure de fin doit être après l'heure de début.");return}
+    if(mins(f.get('start'))<H0*60||mins(f.get('end'))>H1*60){alert("Les créneaux vont de 8h à 18h.");return}
+    S.slots.push({id:uid(),course:f.get('course'),day:f.get('day'),start:f.get('start'),end:f.get('end'),room:f.get('room').trim()});
+    save();renderAll();
+  });
+  $('#fK').addEventListener('submit',function(e){
+    e.preventDefault();var f=new FormData(e.target);
+    S.tasks.push({id:uid(),title:f.get('title').trim(),course:f.get('course'),due:f.get('due'),done:false});
+    save();e.target.reset();renderAll();
+  });
+  $('#flt').addEventListener('change',renderTasks);
+
+  renderAll();go('home');
+})();
+</script>
+</body>
+</html>
